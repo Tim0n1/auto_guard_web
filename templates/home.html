@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #333333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        nav {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #007bff;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #0056b3;
+        }
+        .form-container {
+            text-align: left;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555555;
+            font-weight: bold;
+        }
+        .form-container input[type="text"] {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-container button[type="submit"] {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 0;
+            width: calc(100% - 40px);
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .form-container button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 200px; /* Adjust the width as needed */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="#">Download</a>
+            <a href="#">About us</a>
+            <a href="#">Contacts</a>
+        </nav>
+        <img class="logo" src="{{url_for('static', filename='logoto.png')}}" alt="Logo">
+        <h1>Auto Guard</h1>
+        <div class="form-container">
+            <form action="/" method="post">
+                <label for="user_id">Enter Your ID:</label>
+                <input type="text" id="user_id" name="user_id" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
