@@ -1,3 +1,4 @@
+import numpy as np
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 import database
 import random
@@ -60,8 +61,15 @@ def process_model():
     model_id = selected_model[0]
     user_id = selected_model[1]
     max_size = selected_model[4]
-
+    params_only_data = []
     data = conn.get_data(user_id, model_id, max_size)
+    data = np.asarray(data)[:, 3:6]
+    data = data.T.tolist()
+
+
+    labels = ["RPM", "Speed", "Temperature", "Manifold pressure"]
+
+
     print(len(data))
     print('Selected model:', selected_model)
     # Return a response if needed

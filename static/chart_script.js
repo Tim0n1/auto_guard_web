@@ -1,9 +1,60 @@
+var data = 0;
+function updateChart(data1) {
+    var ctx = document.getElementById('line-chart').getContext('2d');
+    data = data1;
+
+    console.log(data)
+//    myChart = new Chart(ctx, {
+//            type: 'line',
+//            data: {
+//                labels: [1,2,3,4,5,6],
+//                datasets: [{
+//                    label: 'My First Dataset',
+//                    data: data[0],
+//                    borderColor: 'rgb(75, 192, 192)',
+//                    tension: 0.1
+//                }]
+//            },
+//            options: {
+//                responsive: false,
+//                maintainAspectRatio: false,
+//                scales: {
+//                    y: {
+//                        beginAtZero: true
+//                    }
+//                }
+//            }
+//        });
+        }
+
 document.addEventListener("DOMContentLoaded", function() {
     var ctx = document.getElementById('line-chart').getContext('2d');
     var myChart;
+    var current_data;
 
     // Function to update chart data
     function updateChart() {
+    if (data != 0){
+        if (current_data != data){
+        console.log(data)
+        var labels1 = [];
+        for (var i=0; i< data[0].length; i++){
+            labels1.push(i);
+        }
+        console.log(labels1)
+        myChart.data.labels = labels1;
+        myChart.data.datasets[0].data = data[0];
+        var maxValue = Math.max(data[0]);
+        console.log(data);
+        // Update y-axis scale to accommodate the new data
+        myChart.options.scales.y.suggestedMax = maxValue + 10;
+        myChart.update();
+        current_data = data
+        }
+
+    }else{
+
+
     // Make AJAX request to fetch updated data
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
@@ -27,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
     xhr.send();
 
     // Send request to process_model function
-
+}
 }
 
     // Function to create the initial chart
@@ -47,7 +98,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     label: 'My First Dataset',
                     data: initialData.values,
                     borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
                 }]
             },
             options: {
@@ -66,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
     createChart();
 
     // Update the chart every 5 seconds (you can adjust the interval as needed)
-    setInterval(updateChart, 5000);
+    setInterval(updateChart, 2000);
 });
 function selectModel(modelName, modelObject) {
         // Send an HTTP request to the Flask backend with the selected model
@@ -80,14 +130,20 @@ function selectModel(modelName, modelObject) {
         .then(response => {
             if (response.ok) {
                 // Handle success if needed
-                console.log('Model selection sent successfully');
-                console.log(response.json());
-                // Hide the dropdown content
-                toggleDropdown();
+                return response.json()
             } else {
                 // Handle error if needed
                 console.error('Error sending model selection');
             }
+        }).then(data=> {
+        if (data && data.length > 0) {
+        console.log(data);
+        updateChart(data);
+        }
+        else {
+        console.error('Received empty or null data. Chart not updated.');
+    }
+
         })
         .catch(error => {
             console.error('Error sending model selection:', error);
