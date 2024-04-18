@@ -79,6 +79,18 @@ class PostgresServer:
                            {'id': user_id, 'size': size, 'model_id': model_id})
             return cursor.fetchall()
 
+    def get_latest_data(self, user_id: int, model_id: int, size=5000, columns=None):
+        if self.conn is None:
+            return None
+        else:
+            cursor = self.conn.cursor()
+            cursor.execute('''SELECT *
+                              FROM params
+                              WHERE user_id = %(id)s AND model_id = %(model_id)s
+                              ORDER BY datetime DESC  -- Order by timestamp column in descending order
+                              LIMIT %(size)s''', {'id': user_id, 'size': size, 'model_id': model_id})
+            return cursor.fetchall()
+
     def set_model_trained(self, user_id: int, model_id: int):
         if self.conn is None:
             return None

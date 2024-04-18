@@ -4,30 +4,10 @@ function updateChart(data1) {
     data = data1;
 
     console.log(data)
-//    myChart = new Chart(ctx, {
-//            type: 'line',
-//            data: {
-//                labels: [1,2,3,4,5,6],
-//                datasets: [{
-//                    label: 'My First Dataset',
-//                    data: data[0],
-//                    borderColor: 'rgb(75, 192, 192)',
-//                    tension: 0.1
-//                }]
-//            },
-//            options: {
-//                responsive: false,
-//                maintainAspectRatio: false,
-//                scales: {
-//                    y: {
-//                        beginAtZero: true
-//                    }
-//                }
-//            }
-//        });
         }
 
 document.addEventListener("DOMContentLoaded", function() {
+
     var ctx = document.getElementById('line-chart').getContext('2d');
     var myChart;
     var current_data;
@@ -36,14 +16,50 @@ document.addEventListener("DOMContentLoaded", function() {
     function updateChart() {
     if (data != 0){
         if (current_data != data){
+
         console.log(data)
         var labels1 = [];
         for (var i=0; i< data[0].length; i++){
             labels1.push(i);
         }
         console.log(labels1)
+
         myChart.data.labels = labels1;
-        myChart.data.datasets[0].data = data[0];
+       var newData = [
+    {
+        label: 'Rpm',
+        data: data[0],
+        backgroundColor: 'rgba(255, 99, 132, 0.2)', // Red background color
+        borderColor: 'rgba(255, 99, 132, 1)', // Red border color
+        borderWidth: 1
+    },
+    {
+        label: 'Speed',
+        data: data[1],
+        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Blue background color
+        borderColor: 'rgba(54, 162, 235, 1)', // Blue border color
+        borderWidth: 2
+    },
+    {
+        label: 'Temperature',
+        data: data[2],
+        backgroundColor: 'rgba(255, 206, 86, 0.2)', // Yellow background color
+        borderColor: 'rgba(255, 206, 86, 1)', // Yellow border color
+        borderWidth: 2
+    }
+
+
+];
+        for (var i=0; i < newData.length; i++){
+            if (myChart.data.datasets.length > 0){
+                myChart.data.datasets[i] = newData[i];
+            }
+            else{
+            myChart.data.datasets.push(newData[i]);
+}
+        }
+            // Add the new dataset to the chart
+
         var maxValue = Math.max(data[0]);
         console.log(data);
         // Update y-axis scale to accommodate the new data
@@ -65,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // Update chart data
                 myChart.data.labels = newData.labels;
-                myChart.data.datasets[0].data = newData.values;
+                //myChart.data.datasets[0].data = newData.values;
 
                 // Update the chart
                 myChart.update();
@@ -94,11 +110,6 @@ document.addEventListener("DOMContentLoaded", function() {
             type: 'line',
             data: {
                 labels: initialData.labels,
-                datasets: [{
-                    label: 'My First Dataset',
-                    data: initialData.values,
-                    borderColor: 'rgb(75, 192, 192)',
-                }]
             },
             options: {
                 responsive: false,
@@ -116,11 +127,21 @@ document.addEventListener("DOMContentLoaded", function() {
     createChart();
 
     // Update the chart every 5 seconds (you can adjust the interval as needed)
-    setInterval(updateChart, 2000);
+    setInterval(updateChart, 1000);
 });
-function selectModel(modelName, modelObject) {
-        // Send an HTTP request to the Flask backend with the selected model
-        fetch('/process_model', {
+
+function escapeJson(jsonString) {
+    // Replace single quotes with their HTML entity representation
+    return jsonString.replace(/'/g, '&#39;');
+}
+function toggleDropdown() {
+        var dropdownContent = document.querySelector('.dropdown-content');
+        dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function selectModel(modelName, modelObject) {
+        // Your code to handle the selection, e.g., updating the chart with the selected data
+         fetch('/process_model', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -148,10 +169,25 @@ function selectModel(modelName, modelObject) {
         .catch(error => {
             console.error('Error sending model selection:', error);
         });
+         var selectedModelElement = document.getElementById('selected-model');
+    if (modelName !== undefined) {
+        selectedModelElement.textContent = "Model: " + modelName;
+    } else {
+        selectedModelElement.textContent = "Model: None";
     }
-function escapeJson(jsonString) {
-    // Replace single quotes with their HTML entity representation
-    return jsonString.replace(/'/g, '&#39;');
-}
 
+        // Close the dropdown after selection
+        var dropdownContent = document.querySelector('.dropdown-content');
+        dropdownContent.style.display = 'none';
+    }
+
+    // Hide dropdown when clicking elsewhere on the screen
+    document.addEventListener('click', function(event) {
+        var dropdownMenu = document.getElementById('dropdownMenu');
+        var target = event.target;
+        if (!dropdownMenu.contains(target)) {
+            var dropdownContent = dropdownMenu.querySelector('.dropdown-content');
+            dropdownContent.style.display = 'none';
+        }
+    });
 

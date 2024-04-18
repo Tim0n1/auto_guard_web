@@ -57,6 +57,11 @@
             margin-left: 0;
         }
 
+        .user-info {
+    margin-left: 40px; /* Adjust the left margin */
+}
+
+
         /* Styling for download buttons */
         .download-btn {
             background-color: #007bff;
@@ -74,37 +79,51 @@
         }
 
         /* Dropdown menu */
-        .dropdown {
-            /* position: absolute;  Removed absolute positioning */
-            /* top: 0;   Removed top positioning */
-            /* left: 0;  Removed left positioning */
-            margin-right: 20px; /* Added margin right */
-            position: relative; /* Added position relative */
-        }
+       .dropdown {
+    margin-right: 20px;
+    position: relative;
+}
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 1;
-        }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff; /* Background color for dropdown */
+    min-width: 160px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border: 1px solid #ddd; /* Border color */
+    border-radius: 4px; /* Rounded corners */
+}
 
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
+.dropdown-content a {
+    color: #333333; /* Text color */
+    padding: 10px 16px; /* Padding */
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s; /* Smooth transition */
+}
 
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
+.dropdown-content a:hover {
+    background-color: #f5f5f5; /* Background color on hover */
+}
 
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+        .dropdown button {
+    background-color: #007bff; /* Button background color */
+    color: #ffffff; /* Button text color */
+    border: none; /* Remove button border */
+    padding: 10px 20px; /* Button padding */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition */
+    border-radius: 4px; /* Rounded corners */
+}
+
+.dropdown button:hover {
+    background-color: #0056b3; /* Button background color on hover */
+}
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -125,32 +144,22 @@
                     {% endfor %}
                 </div>
             </div>
-            <canvas id="line-chart" width="600" height="300"></canvas> <!-- Moved the canvas up -->
+            <canvas id="line-chart" width="800" height="400"></canvas> <!-- Moved the canvas up -->
             <div class="user-info">
                 <h2>User ID: {{ user_id }}</h2>
+                <h2 id="selected-model"></h2>
                 <!-- Download buttons -->
-                <button class="download-btn">Download Chart 1</button>
-                <button class="download-btn">Download Chart 2</button>
+                <button class="download-btn">Download training data</button>
+                <button class="download-btn">Download inference data</button>
             </div>
         </div>
     </div>
 
     <script src="{{url_for('static', filename='chart_script.js')}}"></script>
     <script>
-        function toggleDropdown() {
-            var dropdownContent = document.querySelector('.dropdown-content');
-            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
-        }
+        var selectedModelElement = document.getElementById('selected-model');
+        selectedModelElement.textContent = "Model: None";
 
-        // Hide dropdown when clicking elsewhere on the screen
-        document.addEventListener('click', function(event) {
-            var dropdownMenu = document.getElementById('dropdownMenu');
-            var target = event.target;
-            if (!dropdownMenu.contains(target)) {
-                var dropdownContent = dropdownMenu.querySelector('.dropdown-content');
-                dropdownContent.style.display = 'none';
-            }
-        });
-    </script>
+        </script>
 </body>
 </html>

@@ -62,7 +62,7 @@ def process_model():
     user_id = selected_model[1]
     max_size = selected_model[4]
     params_only_data = []
-    data = conn.get_data(user_id, model_id, max_size)
+    data = conn.get_latest_data(user_id, model_id, max_size)
     data = np.asarray(data)[:, 3:6]
     data = data.T.tolist()
 
